@@ -39,7 +39,7 @@ The status consists of:
 - last deployment time
 - k8s namespace in which the release lives
 - state of the release (can be: unknown, deployed, uninstalled, superseded, failed, uninstalling, pending-install, pending-upgrade or pending-rollback)
-- list of resources that this release consists of, sorted by kind
+- description of the release (can be completion message or error message)
 - details on last test suite run, if applicable
 - additional notes provided by the chart
 `
@@ -116,6 +116,7 @@ func (s statusPrinter) WriteTable(out io.Writer) error {
 	fmt.Fprintf(out, "NAMESPACE: %s\n", s.release.Namespace)
 	fmt.Fprintf(out, "STATUS: %s\n", s.release.Info.Status.String())
 	fmt.Fprintf(out, "REVISION: %d\n", s.release.Version)
+	fmt.Fprintf(out, "DESCRIPTION: %s\n", s.release.Info.Description)
 
 	executions := executionsByHookEvent(s.release)
 	if tests, ok := executions[release.HookTest]; !ok || len(tests) == 0 {
